@@ -3,22 +3,25 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public ?int $id;
+    use IdTrait;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['read', 'write'])]
     public string $email;
 
     #[ORM\Column]
@@ -28,20 +31,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     public string $firstName;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     public string $lastName;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     public string $veterinarianName;
 
     #[ORM\OneToMany(targetEntity: Dog::class, mappedBy: 'owner', orphanRemoval: true)]
+    #[Groups('read')]
+    #[ApiSubresource]
     private ArrayCollection $dogs;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection;
+        $this->dogs = new ArrayCollection;
     }
 
     public function getDogs(): ArrayCollection
