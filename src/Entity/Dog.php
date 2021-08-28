@@ -3,15 +3,17 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity]
 #[ApiResource(
     normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']]
+    denormalizationContext: ['groups' => ['write']],
+    shortName: 'Users'
 )]
 class Dog
 {
@@ -26,28 +28,28 @@ class Dog
     public ?\DateTimeImmutable $birthDate;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['read', 'write', 'user_read'])]
     public ?\DateTimeImmutable $deathDate;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['read', 'write', 'user_read'])]
     public ?string $race;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['read', 'write', 'user_read'])]
     public ?int $size;
 
     #[ORM\OneToMany(targetEntity: Weighing::class, mappedBy: 'dog', orphanRemoval: true)]
-    #[Groups('read')]
-    public ArrayCollection $weighings;
+    #[Groups(['read', 'user_read'])]
+    public Collection $weighings;
 
     #[ORM\OneToMany(targetEntity: BloodTest::class, mappedBy: 'dog', orphanRemoval: true)]
-    #[Groups('read')]
-    public ArrayCollection $bloodTests;
+    #[Groups(['read', 'user_read'])]
+    public Collection $bloodTests;
 
     #[ORM\ManyToOne(inversedBy: 'dogs')]
     #[Groups('read')]
-    public User $owner;
+    public UserAccount $owner;
 
     public function __construct()
     {
