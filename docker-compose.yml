@@ -1,0 +1,49 @@
+version: "3.5"
+
+x-args: &default_args
+  COMPOSER_VERSION: ${COMPOSER_VERSION:-latest}
+  CADDY_VERSION: ${CADDY_VERSION:-latest}
+  NODE_VERSION: ${NODE_VERSION:-lts}
+  PHP_VERSION: ${PHP_VERSION:-latest}
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: system/Dockerfile
+      target: server_caddy
+      args: *default_args
+    depends_on:
+      - backend
+    volumes:
+      - ./system/server/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./:/app
+    ports:
+      - "443:443"
+
+  backend:
+    build:
+      context: .
+      dockerfile: system/Dockerfile
+      target: backend_php
+      args: *default_args
+    volumes:
+      - ./:/app
+    depends_on:
+      - database
+
+  database:
+    image: postgres:${DB_VERSION:-latest}-alpine
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
