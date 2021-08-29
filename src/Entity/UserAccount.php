@@ -7,10 +7,11 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\UserAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(UserAccountRepository::class)]
 #[ApiResource(
@@ -24,25 +25,28 @@ class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user:read', 'user:write'])]
+    #[Assert\Email]
     public string $email;
 
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column]
+    #[Groups(['user:write'])]
     private string $password;
 
     #[ORM\Column]
     #[Groups(['user:read', 'user:write'])]
     public string $firstName;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['user:read', 'user:write'])]
-    public string $lastName;
+    #[Assert\NotBlank]
+    public ?string $lastName = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['user:read', 'user:write'])]
-    public ?string $veterinarianName;
+    public ?string $veterinarianName = null;
 
     #[ORM\OneToMany(targetEntity: Dog::class, mappedBy: 'owner', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ApiSubresource]
