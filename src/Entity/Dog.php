@@ -7,49 +7,47 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-    shortName: 'Users'
+    normalizationContext: ['groups' => ['dog:read']],
+    denormalizationContext: ['groups' => ['dog:write']]
 )]
 class Dog
 {
     use IdTrait;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
     public ?string $name;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
-    public ?\DateTimeImmutable $birthDate;
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    public ?\DateTimeImmutable $birthDate = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write', 'user_read'])]
-    public ?\DateTimeImmutable $deathDate;
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    public ?\DateTimeImmutable $deathDate = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write', 'user_read'])]
-    public ?string $race;
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    public ?string $race = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write', 'user_read'])]
-    public ?int $size;
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    public ?int $size = null;
+
+    #[ORM\ManyToOne(inversedBy: 'dogs')]
+    #[Groups(['dog:read', 'dog:write'])]
+    public UserAccount $owner;
 
     #[ORM\OneToMany(targetEntity: Weighing::class, mappedBy: 'dog', orphanRemoval: true)]
-    #[Groups(['read', 'user_read'])]
+    #[Groups(['dog:read'])]
     public Collection $weighings;
 
     #[ORM\OneToMany(targetEntity: BloodTest::class, mappedBy: 'dog', orphanRemoval: true)]
-    #[Groups(['read', 'user_read'])]
+    #[Groups(['dog:read'])]
     public Collection $bloodTests;
-
-    #[ORM\ManyToOne(inversedBy: 'dogs')]
-    #[Groups('read')]
-    public UserAccount $owner;
 
     public function __construct()
     {

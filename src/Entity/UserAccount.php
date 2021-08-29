@@ -4,32 +4,26 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use App\Repository\UserRepository;
+use App\Repository\UserAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ORM\Entity(UserRepository::class)]
+#[ORM\Entity(UserAccountRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-    subresourceOperations: [
-        'api_user_accounts_dogs_get_subresource' => [
-            'method' => 'GET',
-            'normalizationContext' => ['groups' => ['user_read']]
-        ]
-    ]
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
+    shortName: 'Users'
 )]
 class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdTrait;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['user:read', 'user:write'])]
     public string $email;
 
     #[ORM\Column]
@@ -39,21 +33,20 @@ class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
+    #[Groups(['user:read', 'user:write'])]
     public string $firstName;
 
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
+    #[Groups(['user:read', 'user:write'])]
     public string $lastName;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['user:read', 'user:write'])]
     public ?string $veterinarianName;
 
-    #[ORM\OneToMany(targetEntity: Dog::class, mappedBy: 'owner', orphanRemoval: true)]
-    #[Groups('read')]
+    #[ORM\OneToMany(targetEntity: Dog::class, mappedBy: 'owner', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ApiSubresource]
-    #[MaxDepth(1)]
+    #[Groups('user:read')]
     private Collection $dogs;
 
     public function __construct()
@@ -61,28 +54,22 @@ class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dogs = new ArrayCollection;
     }
 
-    public function getDogs(): ArrayCollection
+    public function getDogs(): iterable
     {
         return $this->dogs;
     }
 
-    public function addDog(Dog $dog): self
+    public function addDog(Dog $dog): void
     {
-        if (!$this->dogs->contains($dog)) {
-            $this->dogs[] = $dog;
-            $dog->owner = $this;
-        }
+        if ($this->dogs->contains($dog)) return;
 
-        return $this;
+        $this->dogs[] = $dog;
+        $dog->owner = $this;
     }
 
-    public function removeDog(Dog $dog): self
+    public function removeDog(Dog $dog): void
     {
-        if ($this->dogs->contains($dog)) {
-            $this->dogs->removeElement($dog);
-        }
-
-        return $this;
+        $this->dogs->removeElement($dog);
     }
 
     /**
@@ -92,7 +79,7 @@ class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return $this->email;
     }
 
     /**
@@ -100,7 +87,7 @@ class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return $this->email;
     }
 
     /**
