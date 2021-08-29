@@ -16,7 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['dog:read'],
         'datetime_format' => 'j/m/Y'
     ],
-    denormalizationContext: ['groups' => ['dog:write']],
+    denormalizationContext: [
+        'groups' => ['dog:write'],
+        'datetime_format' => 'j/m/Y'
+    ],
     shortName: 'Chien'
 )]
 class Dog
@@ -60,17 +63,17 @@ class Dog
     #[ORM\OneToMany(targetEntity: Weighing::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
     #[ApiProperty('Pesées')]
-    public Collection $weighings;
+    private Collection $weighings;
 
     #[ORM\OneToMany(targetEntity: BloodTest::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
     #[ApiProperty('Examens sanguins')]
-    public Collection $bloodTests;
+    private Collection $bloodTests;
 
     #[ORM\OneToMany(targetEntity: Treatment::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
     #[ApiProperty('Traitements')]
-    public Collection $treatments;
+    private Collection $treatments;
 
     public function __construct()
     {
@@ -79,60 +82,66 @@ class Dog
         $this->treatments = new ArrayCollection;
     }
 
-    public function addWeighing(Weighing $weighing): self
+    public function addWeighing(Weighing $weighing, bool $updateRelation = true): void
     {
-        if (!$this->weighings->contains($weighing)) {
-            $this->weighings[] = $weighing;
-            $weighing->dog = $this;
-        }
+        if ($this->weighings->contains($weighing)) return;
 
-        return $this;
+        $this->weighings->add($weighing);
+
+        $updateRelation && $weighing->setDog($this);
     }
 
-    public function removeWeighing(Weighing $weighing): self
+    public function removeWeighing(Weighing $weighing, bool $updateRelation = true): void
     {
-        if ($this->weighings->contains($weighing)) {
-            $this->weighings->removeElement($weighing);
-        }
+        $this->weighings->removeElement($weighing);
 
-        return $this;
+        $updateRelation && $weighing->setDog(null, false);
     }
 
-    public function addBloodTest(BloodTest $bloodTest): self
+    public function getWeighings(): iterable
     {
-        if (!$this->bloodTests->contains($bloodTest)) {
-            $this->bloodTests[] = $bloodTest;
-            $bloodTest->dog = $this;
-        }
-
-        return $this;
+        return $this->weighings;
     }
 
-    public function removeBloodTest(BloodTest $bloodTest): self
+    public function addBloodTest(BloodTest $bloodTest, bool $updateRelation = true): void
     {
-        if ($this->bloodTests->contains($bloodTest)) {
-            $this->bloodTests->removeElement($bloodTest);
-        }
+        if ($this->bloodTests->contains($bloodTest)) return;
 
-        return $this;
+        $this->bloodTests->add($bloodTest);
+
+        $updateRelation && $bloodTest->setDog($this);
     }
 
-    public function addTreatment(Treatment $treatment): self
+    public function removeBloodTest(BloodTest $bloodTest, bool $updateRelation = true): void
     {
-        if (!$this->treatments->contains($treatment)) {
-            $this->treatments[] = $treatment;
-            $treatment->dog = $this;
-        }
+        $this->bloodTests->removeElement($bloodTest);
 
-        return $this;
+        $updateRelation && $bloodTest->setDog(null, false);
     }
 
-    public function removeTreatment(Treatment $treatment): self
+    public function getBloodTests(): iterable
     {
-        if ($this->treatments->contains($treatment)) {
-            $this->treatments->removeElement($treatment);
-        }
+        return $this->bloodTests;
+    }
 
-        return $this;
+    public function addTreatment(Treatment $treatment, bool $updateRelation = true): void
+    {
+        if ($this->treatments->contains($treatment)) return;
+
+        $this->treatments->add($treatment);
+
+        $updateRelation && $treatment->setDog($this, false);
+    }
+
+    public function removeTreatment(Treatment $treatment, bool $updateRelation = true): void
+    {
+        $this->treatments->removeElement($treatment);
+
+        $updateRelation && $treatment->setDog(null, false);
+    }
+
+    public function getTreatments(): iterable
+    {
+        return $this->treatments;
     }
 }

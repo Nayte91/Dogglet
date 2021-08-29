@@ -8,7 +8,6 @@ use App\Entity\UserAccount;
 use App\Entity\Weighing;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UsersFixtures extends Fixture
@@ -65,7 +64,7 @@ class UsersFixtures extends Fixture
         foreach ($this->getSukiWeighings() as $date => $value) {
             $weigh = new Weighing;
 
-            $weigh->dog = $dog;
+            $weigh->setDog($dog);
             $weigh->date = \DateTimeImmutable::createFromFormat('j/m/Y', $date);
             $weigh->weight = $value;
 

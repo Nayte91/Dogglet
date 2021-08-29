@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
-    normalizationContext: ['groups' => ['weighing:read']],
+    normalizationContext: [
+        'groups' => ['weighing:read'],
+        'datetime_format' => 'j/m/Y'
+    ],
     denormalizationContext: ['groups' => ['weighing:write']],
     shortName: 'Pesee'
 )]
@@ -22,9 +26,23 @@ class Weighing
 
     #[ORM\Column]
     #[Groups(['weighing:read', 'weighing:write', 'dog:read'])]
+    #[Assert\Positive]
     public int $weight;
 
-    #[ORM\ManyToOne(inversedBy: 'weighings')]
+    #[ORM\ManyToOne(inversedBy: 'weighing')]
     #[Groups(['weighing:read', 'weighing:write'])]
-    public Dog $dog;
+    private ?Dog $dog;
+
+    public function setDog(?Dog $dog, bool $updateRelation = true): void
+    {
+        $this->dog = $dog;
+        if ($updateRelation && null !== $dog) {
+            $dog->addWeighing($this, false);
+        }
+    }
+
+    public function getDog(): ?Dog
+    {
+        return $this->dog;
+    }
 }

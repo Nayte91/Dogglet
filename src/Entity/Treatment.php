@@ -46,5 +46,18 @@ class Treatment
 
     #[ORM\ManyToOne(inversedBy: 'treatment')]
     #[Groups(['treatment:read', 'treatment:write'])]
-    public Dog $dog;
+    private ?Dog $dog = null;
+
+    public function setDog(?Dog $dog, bool $updateRelation = true): void
+    {
+        $this->dog = $dog;
+        if ($updateRelation && null !== $dog) {
+            $dog->addTreatment($this, false);
+        }
+    }
+
+    public function getDog(): ?Dog
+    {
+        return $this->dog;
+    }
 }

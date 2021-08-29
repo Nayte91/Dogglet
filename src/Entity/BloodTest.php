@@ -22,7 +22,20 @@ class BloodTest
 
     #[ORM\ManyToOne(inversedBy: 'bloodTest')]
     #[Groups(['bloodTest:read', 'bloodTest:write'])]
-    public Dog $dog;
+    private ?Dog $dog = null;
 
     //Need other values
+
+    public function setDog(?Dog $dog, bool $updateRelation = true): void
+    {
+        $this->dog = $dog;
+        if ($updateRelation && null !== $dog) {
+            $dog->addBloodTest($this, false);
+        }
+    }
+
+    public function getDog(): ?Dog
+    {
+        return $this->dog;
+    }
 }
