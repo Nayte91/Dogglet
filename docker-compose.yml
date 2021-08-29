@@ -15,13 +15,22 @@ services:
       args: *default_args
     depends_on:
       - backend
+###> Prod
+#    labels:
+#      traefik.http.routers.${PROJECT_NAME}.rule: Host(`${PROJECT_NAME}.anagraph.org`)
+#    networks:
+#      - proxy
+#      - default
+###< Prod
     volumes:
       - ./system/server/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+###> Dev
       - ./:/app
     ports:
       - "443:443"
+###< Dev
 
   backend:
     build:
@@ -29,10 +38,12 @@ services:
       dockerfile: system/Dockerfile
       target: backend_php
       args: *default_args
-    volumes:
-      - ./:/app
     depends_on:
       - database
+###> Dev
+    volumes:
+      - ./:/app
+###< Dev
 
   database:
     image: postgres:${DB_VERSION:-latest}-alpine
@@ -40,8 +51,17 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
+###> Dev
     ports:
       - "5432:5432"
+###< Dev
+
+###> Prod
+#networks:
+#  proxy:
+#    external:
+#      name: reverse_proxy_network
+###< Prod
 
 volumes:
   pgdata:
