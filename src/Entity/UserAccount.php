@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
-    shortName: 'User'
+    shortName: 'Maitre'
 )]
 class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
 {

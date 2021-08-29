@@ -11,7 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity]
 #[ApiResource(
     normalizationContext: ['groups' => ['dog:read']],
-    denormalizationContext: ['groups' => ['dog:write']]
+    denormalizationContext: ['groups' => ['dog:write']],
+    shortName: 'Chien'
 )]
 class Dog
 {
