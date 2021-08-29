@@ -4,29 +4,7 @@ ARG COMPOSER_VERSION
 ARG PHP_VERSION
 ARG CADDY_VERSION
 
-#FROM node:${NODE_VERSION}-alpine AS frontend_yarn
-#
-#WORKDIR /app
-#
-#### Yarn dependencies
-#COPY ./yarn.lock ./package.json ./webpack.config.js ./tsconfig.json ./
-#RUN yarn install --frozen-lockfile
-#
-#### Front static files build
-#COPY ./src-front/ ./src-front/
-#RUN yarn build
-
 FROM composer:${COMPOSER_VERSION} AS backend_composer
-
-WORKDIR /app
-
-### Composer dependencies
-COPY ./composer.json ./composer.lock ./
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-scripts \
-    --prefer-dist
 
 FROM php:${PHP_VERSION}-fpm AS backend_php
 
@@ -44,10 +22,13 @@ COPY --from=backend_composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-#COPY --from=frontend_yarn /app/public/build/ ./public/build
-COPY --from=backend_composer /app/vendor/ ./vendor/
-
 COPY . .
+
+### Composer dependencies
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --prefer-dist
 
 FROM caddy:${CADDY_VERSION}-alpine AS server_caddy
 
