@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['bloodTest:read']],
     denormalizationContext: ['groups' => ['bloodTest:write']],
-    shortName: 'Examens'
 )]
 class BloodTest
 {

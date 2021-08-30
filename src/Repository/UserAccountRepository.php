@@ -37,7 +37,7 @@ class UserAccountRepository extends ServiceEntityRepository implements PasswordU
     }
 
     // /**
-    //  * @return UserAccount[] Returns an array of Users objects
+    //  * @return UserAccount[] Returns an array of UserAccount objects
     //  */
     /*
     public function findByExampleField($value)

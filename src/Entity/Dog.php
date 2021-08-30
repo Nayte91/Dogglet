@@ -19,8 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['dog:write'],
         'datetime_format' => 'j/m/Y'
-    ],
-    shortName: 'Chien'
+    ]
 )]
 class Dog
 {

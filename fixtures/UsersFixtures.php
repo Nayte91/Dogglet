@@ -3,7 +3,6 @@
 namespace App\Fixtures;
 
 use App\Entity\Dog;
-use App\Entity\TreatmentType;
 use App\Entity\UserAccount;
 use App\Entity\Weighing;
 use Doctrine\Bundle\FixturesBundle\Fixture;

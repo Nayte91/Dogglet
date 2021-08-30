@@ -10,9 +10,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
-    normalizationContext: ['groups' => ['treatment:read']],
-    denormalizationContext: ['groups' => ['treatment:write']],
-    shortName: 'Traitement'
+    normalizationContext: [
+        'groups' => ['treatment:read'],
+        'datetime_format' => 'j/m/Y'
+    ],
+    denormalizationContext: ['groups' => ['treatment:write']]
 )]
 class Treatment
 {
@@ -22,7 +24,8 @@ class Treatment
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
     public ?\DateTimeImmutable $date;
 
-    #[ORM\OneToOne]
+    #[ORM\ManyToOne(targetEntity: TreatmentType::class)]
+    #[ORM\JoinColumn(unique: false)]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
     #[ApiProperty('Type de traitement')]
     #[Assert\NotBlank]
@@ -34,7 +37,8 @@ class Treatment
 
     #[ORM\Column]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
-    public int $price = 0;
+    #[Assert\PositiveOrZero]
+    public float $price = 0;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
@@ -42,7 +46,7 @@ class Treatment
 
     #[ORM\Column]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
-    public string $status = 'fait';
+    public string $status = 'Done';
 
     #[ORM\ManyToOne(inversedBy: 'treatment')]
     #[Groups(['treatment:read', 'treatment:write'])]

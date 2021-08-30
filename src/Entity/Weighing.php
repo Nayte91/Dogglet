@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'datetime_format' => 'j/m/Y'
     ],
     denormalizationContext: ['groups' => ['weighing:write']],
-    shortName: 'Pesee'
 )]
 class Weighing
 {

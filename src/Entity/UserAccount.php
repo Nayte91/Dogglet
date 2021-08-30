@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'datetime_format' => 'j/m/Y'
     ],
     denormalizationContext: ['groups' => ['user:write']],
-    shortName: 'Maitre'
 )]
 class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
 {
