@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Fixtures;
 
 use App\Entity\Dog;
 use App\Entity\TreatmentType;

@@ -15,7 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(UserAccountRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['user:read']],
+    normalizationContext: [
+        'groups' => ['user:read'],
+        'datetime_format' => 'j/m/Y'
+    ],
     denormalizationContext: ['groups' => ['user:write']],
     shortName: 'Maitre'
 )]
