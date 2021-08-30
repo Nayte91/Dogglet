@@ -19,23 +19,9 @@ class UsersFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $this->loadTreatmentTypes($manager);
 
         $this->loadCarole($manager);
         $this->loadJulien($manager);
-
-        $manager->flush();
-    }
-
-    private function loadTreatmentTypes(ObjectManager $manager): void
-    {
-        foreach ($this->getTreatmentTypes() as $treatmentTypeData) {
-            $treatmentType = new TreatmentType;
-
-            $treatmentType->name = $treatmentTypeData;
-
-            $manager->persist($treatmentType);
-        }
 
         $manager->flush();
     }
@@ -156,20 +142,6 @@ class UsersFixtures extends Fixture
             '29/07/2021' => 13800,
             '11/08/2021' => 14500,
             '26/08/2021' => 15200,
-        ];
-    }
-
-    private function getTreatmentTypes(): array
-    {
-        return [
-            'Vaccin',
-            'Vermifuge',
-            'Antipuces / tiques',
-            'Maladie',
-            'Opération',
-            'Accident',
-            'Soin',
-            'Autre'
         ];
     }
 }
