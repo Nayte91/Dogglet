@@ -19,7 +19,6 @@ class TypesFixtures extends Fixture
     {
         foreach ($this->getTreatmentTypesData() as $treatmentTypeData) {
             $treatmentType = new TreatmentType;
-
             $treatmentType->name = $treatmentTypeData;
 
             $manager->persist($treatmentType);

@@ -27,6 +27,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
 
             $treatment->setDog($suki);
             $treatment->date = \DateTimeImmutable::createFromFormat('j/m/Y', $treatmentData['date']);
+
             $treatment->type = $manager->getRepository(TreatmentType::class)->findOneBy(['name' => $treatmentData['type']]);
             $treatment->details = $treatmentData['details'] ?? null;
             $treatment->price = $treatmentData['price'] ?? 0;
@@ -64,7 +65,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '28/04/2021',
-                'type' => 'Vermifuge',
+                'type' => 'Antiparasitaire',
                 'details' => 'Drontal 10kg'
             ],
             [
@@ -102,7 +103,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '02/07/2021',
-                'type' => 'Vermifuge',
+                'type' => 'Antiparasitaire',
                 'details' => 'Vectra 10 - 25kg'
             ],
             [
@@ -118,7 +119,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '01/08/2021',
-                'type' => 'Vermifuge',
+                'type' => 'Antiparasitaire',
                 'details' => 'Vectra 10 - 25kg'
             ],
             [
@@ -139,7 +140,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '08/10/2021',
-                'type' => 'Vermifuge',
+                'type' => 'Antiparasitaire',
                 'status' => 'Planned'
             ],
         ];
