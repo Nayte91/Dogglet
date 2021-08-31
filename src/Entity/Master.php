@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(MasterRepository::class)]
@@ -20,6 +21,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'datetime_format' => 'j/m/Y'
     ],
     denormalizationContext: ['groups' => ['user:write']],
+    collectionOperations: [
+        'get',
+        'post' => ['validation_groups' => ['default', 'create']]
+    ]
 )]
 class Master implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -34,8 +39,12 @@ class Master implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column]
-    #[Groups(['user:write'])]
     private string $password;
+
+    #[Groups(['user:write'])]
+    #[SerializedName('password')]
+    #[Assert\NotBlank(groups: ['create'])]
+    public ?string $plainPassword = null;
 
     #[ORM\Column]
     #[Groups(['user:read', 'user:write'])]
