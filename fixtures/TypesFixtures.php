@@ -30,8 +30,7 @@ class TypesFixtures extends Fixture
     {
         return [
             'Vaccin',
-            'Vermifuge',
-            'Antipuces / tiques',
+            'Antiparasitaire',
             'Maladie',
             'Opération',
             'Accident',

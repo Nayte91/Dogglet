@@ -52,6 +52,8 @@ class Treatment
     #[Groups(['treatment:read', 'treatment:write'])]
     private ?Dog $dog = null;
 
+    public static array $status_list = ['To do', 'Planned', 'In Progress', 'Done', 'Cancelled'];
+
     public function setDog(?Dog $dog, bool $updateRelation = true): void
     {
         $this->dog = $dog;

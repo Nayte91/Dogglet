@@ -47,7 +47,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '31/03/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Pipette Advantix 4 - 10kg'
             ],
             [
@@ -69,7 +69,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '01/05/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Pipette Vectra 4 - 10kg'
             ],
             [
@@ -80,12 +80,12 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '29/05/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Drontal 2 x 10kg'
             ],
             [
                 'date' => '02/06/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Vectra 10 - 25kg'
             ],
             [
@@ -97,7 +97,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '29/06/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Vectra 10 - 25kg'
             ],
             [
@@ -123,17 +123,17 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'date' => '04/08/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Advantix 10 - 25kg'
             ],
             [
                 'date' => '28/08/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Advantix 10 - 25kg'
             ],
             [
                 'date' => '28/09/2021',
-                'type' => 'Antipuces / tiques',
+                'type' => 'Antiparasitaire',
                 'details' => 'Advantix 10 - 25kg',
                 'status' => 'Planned'
             ],
