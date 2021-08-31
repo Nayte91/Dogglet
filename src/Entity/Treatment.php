@@ -24,12 +24,10 @@ class Treatment
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
     public ?\DateTimeImmutable $date;
 
-    #[ORM\ManyToOne(targetEntity: TreatmentType::class)]
-    #[ORM\JoinColumn(unique: false)]
+    #[ORM\Column]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
-    #[ApiProperty('Type de traitement')]
     #[Assert\NotBlank]
-    public TreatmentType $type;
+    public string $type = 'Autre';
 
     #[ORM\Column(nullable: true)]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
@@ -46,6 +44,7 @@ class Treatment
 
     #[ORM\Column]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
+    #[Assert\NotBlank]
     public string $status = 'Done';
 
     #[ORM\ManyToOne(inversedBy: 'treatment')]
@@ -53,6 +52,8 @@ class Treatment
     private ?Dog $dog = null;
 
     public static array $status_list = ['To do', 'Planned', 'In Progress', 'Done', 'Cancelled'];
+
+    public static array $status_type = ['Autre', 'Vaccin', 'Antiparasitaire', 'Maladie', 'Opération', 'Accident', 'Soin'];
 
     public function setDog(?Dog $dog, bool $updateRelation = true): void
     {

@@ -4,7 +4,6 @@ namespace App\Fixtures;
 
 use App\Entity\Dog;
 use App\Entity\Treatment;
-use App\Entity\TreatmentType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -28,7 +27,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
             $treatment->setDog($suki);
             $treatment->date = \DateTimeImmutable::createFromFormat('j/m/Y', $treatmentData['date']);
 
-            $treatment->type = $manager->getRepository(TreatmentType::class)->findOneBy(['name' => $treatmentData['type']]);
+            $treatment->type = $treatmentData['type'] ?? 'Autre';
             $treatment->details = $treatmentData['details'] ?? null;
             $treatment->price = $treatmentData['price'] ?? 0;
             $treatment->status = $treatmentData['status'] ?? 'Done';
@@ -149,7 +148,6 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            TypesFixtures::class,
             UsersFixtures::class
         ];
     }
