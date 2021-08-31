@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use App\Repository\UserAccountRepository;
+use App\Repository\MasterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(UserAccountRepository::class)]
+#[ORM\Entity(MasterRepository::class)]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['user:read'],
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     denormalizationContext: ['groups' => ['user:write']],
 )]
-class UserAccount implements UserInterface, PasswordAuthenticatedUserInterface
+class Master implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdTrait;
 

@@ -3,13 +3,12 @@
 namespace App\Fixtures;
 
 use App\Entity\Dog;
-use App\Entity\UserAccount;
-use App\Entity\Weighing;
+use App\Entity\Master;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UsersFixtures extends Fixture
+class MasterFixtures extends Fixture
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher
@@ -28,7 +27,7 @@ class UsersFixtures extends Fixture
     private function loadCarole(ObjectManager $manager): void
     {
         $caroleData = $this->getCarolesData();
-        $carole = new UserAccount;
+        $carole = new Master;
 
         $carole->email = $caroleData['email'];
         $carole->setPassword($this->passwordHasher->hashPassword($carole, $caroleData['password']));
@@ -45,23 +44,13 @@ class UsersFixtures extends Fixture
 
         $manager->persist($dog);
         $carole->addDog($dog);
-
-        foreach ($this->getSukiWeighings() as $date => $value) {
-            $weigh = new Weighing;
-
-            $weigh->setDog($dog);
-            $weigh->date = \DateTimeImmutable::createFromFormat('j/m/Y', $date);
-            $weigh->weight = $value;
-
-            $manager->persist($weigh);
-        }
     }
 
     private function loadJulien(ObjectManager $manager): void
     {
         $juliensData = $this->getJuliensData();
 
-        $julien = new UserAccount;
+        $julien = new Master;
 
         $julien->email = $juliensData['email'];
         $julien->setPassword($this->passwordHasher->hashPassword($julien, $juliensData['password']));
@@ -118,29 +107,6 @@ class UsersFixtures extends Fixture
             'name' => 'Suki',
             'race' => 'Berger Australien',
             'birthDate' => '28/01/2021'
-        ];
-    }
-
-    private function getSukiWeighings(): array
-    {
-        return [
-            '28/01/2021' => 420,
-            '29/01/2021' => 410,
-            '30/01/2021' => 460,
-            '31/01/2021' => 520,
-            '01/02/2021' => 600,
-            '22/02/2021' => 2000,
-            '29/03/2021' => 5200,
-            '31/03/2021' => 5200,
-            '26/04/2021' => 7800,
-            '18/05/2021' => 9800,
-            '28/05/2021' => 10700,
-            '10/06/2021' => 11200,
-            '27/06/2021' => 12600,
-            '19/07/2021' => 13700,
-            '29/07/2021' => 13800,
-            '11/08/2021' => 14500,
-            '26/08/2021' => 15200,
         ];
     }
 }

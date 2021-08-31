@@ -8,9 +8,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
+class TreatmentFixtures extends Fixture implements DependentFixtureInterface
 {
-
     public function load(ObjectManager $manager)
     {
         $this->loadTreatments($manager);
@@ -21,7 +20,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
     private function loadTreatments(ObjectManager $manager): void
     {
         $suki = $manager->getRepository(Dog::class)->findOneBy(['name' => 'Suki']);
-        foreach ($this->getTreatmentsData() as $treatmentData) {
+        foreach ($this->getSukiTreatmentsData() as $treatmentData) {
             $treatment = new Treatment;
 
             $treatment->setDog($suki);
@@ -37,7 +36,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
         }
     }
 
-    private function getTreatmentsData(): array
+    private function getSukiTreatmentsData(): array
     {
         return [
             [
@@ -148,7 +147,7 @@ class TreatmentsFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            UsersFixtures::class
+            MasterFixtures::class
         ];
     }
 }

@@ -57,7 +57,7 @@ class Dog
     #[Groups(['dog:read', 'dog:write'])]
     #[ApiProperty('Propriétaire', iri: 'https://schema.org/Person')]
     #[Assert\NotBlank]
-    public UserAccount $owner;
+    public Master $owner;
 
     #[ORM\OneToMany(targetEntity: Weighing::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
