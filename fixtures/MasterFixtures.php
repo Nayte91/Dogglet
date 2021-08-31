@@ -65,6 +65,7 @@ class MasterFixtures extends Fixture
 
         $dog->name = $juliensDogData['name'];
         $dog->race = $juliensDogData['race'];
+        $dog->size = $juliensDogData['size'];
         $dog->birthDate = \DateTimeImmutable::createFromFormat('j/m/Y', $juliensDogData['birthDate']);
 
         $manager->persist($dog);
@@ -97,6 +98,7 @@ class MasterFixtures extends Fixture
         return [
             'name' => 'ruby',
             'race' => 'Spitz nain',
+            'size' => 59,
             'birthDate' => '01/09/2019'
         ];
     }

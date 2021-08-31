@@ -32,13 +32,13 @@ class Dog
 
     #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
-    #[ApiProperty('Date de naissance')]
+    #[ApiProperty(description: 'Date de naissance', example: '24/12/2008')]
     #[Assert\Type(\DateTimeInterface::class)]
     public ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
-    #[ApiProperty('Date de décès')]
+    #[ApiProperty(description: 'Date de décès', example: '27/02/2019')]
     #[Assert\Type(\DateTimeInterface::class)]
     public ?\DateTimeInterface $deathDate = null;
 
@@ -49,13 +49,13 @@ class Dog
 
     #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
-    #[ApiProperty('Taille en cm')]
+    #[ApiProperty(description: 'Taille en cm', example: '140')]
     #[Assert\Positive]
     public ?int $size = null;
 
     #[ORM\ManyToOne(inversedBy: 'dogs')]
     #[Groups(['dog:read', 'dog:write'])]
-    #[ApiProperty('Propriétaire', iri: 'https://schema.org/Person')]
+    #[ApiProperty(description: 'Propriétaire', example: '/api/masters/1', iri: 'https://schema.org/Person')]
     #[Assert\NotBlank]
     public Master $owner;
 

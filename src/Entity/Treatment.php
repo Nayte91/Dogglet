@@ -23,6 +23,7 @@ class Treatment
     #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
     #[Assert\Type(\DateTimeInterface::class)]
+    #[ApiProperty(description: 'Date du traitement', example: '24/12/2008')]
     public ?\DateTimeInterface $date;
 
     #[ORM\Column]
@@ -50,6 +51,7 @@ class Treatment
 
     #[ORM\ManyToOne(inversedBy: 'treatment')]
     #[Groups(['treatment:read', 'treatment:write'])]
+    #[ApiProperty(description: 'Chien', example: '/api/dogs/1')]
     private ?Dog $dog = null;
 
     public static array $status_list = ['To do', 'Planned', 'In Progress', 'Done', 'Cancelled'];
