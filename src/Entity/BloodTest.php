@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
@@ -15,9 +16,10 @@ class BloodTest
 {
     use IdTrait;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['bloodTest:read', 'bloodTest:write', 'dog:read'])]
-    public ?\DateTimeImmutable $date;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'bloodTest')]
     #[Groups(['bloodTest:read', 'bloodTest:write'])]

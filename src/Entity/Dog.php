@@ -30,17 +30,17 @@ class Dog
     #[ApiProperty('Nom')]
     public ?string $name;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
     #[ApiProperty('Date de naissance')]
-    #[Assert\Date]
-    public ?\DateTimeImmutable $birthDate = null;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
     #[ApiProperty('Date de décès')]
-    #[Assert\Date]
-    public ?\DateTimeImmutable $deathDate = null;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public ?\DateTimeInterface $deathDate = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]

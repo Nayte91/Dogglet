@@ -19,9 +19,10 @@ class Weighing
 {
     use IdTrait;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['weighing:read', 'weighing:write', 'dog:read'])]
-    public ?\DateTimeImmutable $date;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public ?\DateTimeInterface $date;
 
     #[ORM\Column]
     #[Groups(['weighing:read', 'weighing:write', 'dog:read'])]

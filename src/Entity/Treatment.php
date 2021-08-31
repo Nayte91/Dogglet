@@ -20,9 +20,10 @@ class Treatment
 {
     use IdTrait;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
-    public ?\DateTimeImmutable $date;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public ?\DateTimeInterface $date;
 
     #[ORM\Column]
     #[Groups(['treatment:read', 'treatment:write', 'dog:read'])]
@@ -53,7 +54,7 @@ class Treatment
 
     public static array $status_list = ['To do', 'Planned', 'In Progress', 'Done', 'Cancelled'];
 
-    public static array $status_type = ['Autre', 'Vaccin', 'Antiparasitaire', 'Maladie', 'Opération', 'Accident', 'Soin'];
+    public static array $status_type = ['Autre', 'Vaccin', 'Antiparasitaire', 'Maladie', 'Opération', 'Accident', 'Toilettage'];
 
     public function setDog(?Dog $dog, bool $updateRelation = true): void
     {
