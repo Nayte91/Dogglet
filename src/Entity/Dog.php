@@ -83,7 +83,7 @@ class Dog
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
     public ?string $microchipNumber = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public bool $hasGPS = false;
 
