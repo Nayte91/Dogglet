@@ -39,6 +39,8 @@ class MasterFixtures extends Fixture
         $dog = new Dog;
         $dog->name = $caroleDogData['name'];
         $dog->race = $caroleDogData['race'];
+        $dog->gender = $caroleDogData['gender'];
+        $dog->isSterilized = $caroleDogData['isSterilized'];
         $dog->birthDate = \DateTimeImmutable::createFromFormat('j/m/Y', $caroleDogData['birthDate']);
 
         $manager->persist($dog);
@@ -64,7 +66,12 @@ class MasterFixtures extends Fixture
 
         $dog->name = $juliensDogData['name'];
         $dog->race = $juliensDogData['race'];
+        $dog->gender = $juliensDogData['gender'];
+        $dog->isSterilized = $juliensDogData['isSterilized'];
+        $dog->hasMicrochip = $juliensDogData['hasMicrochip'];
+        $dog->microchipNumber = $juliensDogData['microchipNumber'];
         $dog->size = $juliensDogData['size'];
+        $dog->coat = $juliensDogData['coat'];
         $dog->birthDate = \DateTimeImmutable::createFromFormat('j/m/Y', $juliensDogData['birthDate']);
 
         $manager->persist($dog);
@@ -95,10 +102,15 @@ class MasterFixtures extends Fixture
     private function getJuliensDogsData(): array
     {
         return [
-            'name' => 'ruby',
+            'name' => 'Ruby',
+            'gender' => 'F',
+            'isSterilized' => true,
+            'hasMicrochip' => true,
+            'microchipNumber' => '250269608492714',
             'race' => 'Spitz nain',
+            'coat' => 'Roux',
             'size' => 59,
-            'birthDate' => '01/09/2019'
+            'birthDate' => '23/11/2019'
         ];
     }
 
@@ -106,6 +118,8 @@ class MasterFixtures extends Fixture
     {
         return [
             'name' => 'Suki',
+            'gender' => 'F',
+            'isSterilized' => true,
             'race' => 'Berger Australien',
             'birthDate' => '28/01/2021'
         ];

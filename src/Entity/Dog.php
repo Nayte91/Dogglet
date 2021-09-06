@@ -30,6 +30,16 @@ class Dog
     #[ApiProperty('Nom')]
     public ?string $name;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['dog:read', 'dog:write'])]
+    #[ApiProperty('Sexe')]
+    public ?string $gender = 'M';
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    #[ApiProperty('Stérilisé / Castré')]
+    public bool $isSterilized = false;
+
     #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
     #[ApiProperty(description: 'Date de naissance', example: '24/12/2008')]
@@ -49,9 +59,47 @@ class Dog
 
     #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    #[Assert\NotBlank]
+    #[ApiProperty('Robe')]
+    public ?string $coat = null;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public bool $isInsured = false;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public bool $hasLicense = false;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public bool $hasPassport = false;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public bool $hasMicrochip = false;
+
+    #[ORM\Column(type:'decimal', precision:20, scale:0, nullable: true, unique:true)]
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
+    public ?string $microchipNumber = null;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public bool $hasGPS = false;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['dog:read', 'dog:write', 'user:read'])]
     #[ApiProperty(description: 'Taille en cm', example: '140')]
     #[Assert\Positive]
     public ?int $size = null;
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public array $allergies = [];
+
+    #[ORM\Column]
+    #[Groups(['dog:read', 'dog:write'])]
+    public array $behaviorRecords = [];
 
     #[ORM\ManyToOne(inversedBy: 'dogs')]
     #[Groups(['dog:read', 'dog:write'])]
@@ -59,10 +107,22 @@ class Dog
     #[Assert\NotBlank]
     public Master $owner;
 
+    #[ORM\ManyToMany(targetEntity: Dog::class)]
+    #[ORM\JoinTable(name: 'dog_heredity')]
+    #[ORM\JoinColumn(name: 'parent')]
+    #[ORM\InverseJoinColumn(name: 'child')]
+    #[Groups(['dog:read'])]
+    public Collection $parents;
+
     #[ORM\OneToMany(targetEntity: Weighing::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
     #[ApiProperty('Pesées')]
     private Collection $weighings;
+
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'dog', orphanRemoval: true)]
+    #[Groups(['dog:read'])]
+    #[ApiProperty('Signalements')]
+    private Collection $reports;
 
     #[ORM\OneToMany(targetEntity: BloodTest::class, mappedBy: 'dog', orphanRemoval: true)]
     #[Groups(['dog:read'])]
@@ -79,6 +139,7 @@ class Dog
         $this->weighings = new ArrayCollection;
         $this->bloodTests = new ArrayCollection;
         $this->treatments = new ArrayCollection;
+        $this->reports = new ArrayCollection;
     }
 
     public function addWeighing(Weighing $weighing, bool $updateRelation = true): void
@@ -100,6 +161,27 @@ class Dog
     public function getWeighings(): iterable
     {
         return $this->weighings;
+    }
+
+    public function addReport(Report $report, bool $updateRelation = true): void
+    {
+        if ($this->reports->contains($report)) return;
+
+        $this->weighings->add($report);
+
+        $updateRelation && $report->setDog($this);
+    }
+
+    public function removeReport(Report $report, bool $updateRelation = true): void
+    {
+        $this->reports->removeElement($report);
+
+        $updateRelation && $report->setDog(null, false);
+    }
+
+    public function getReports(): iterable
+    {
+        return $this->reports;
     }
 
     public function addBloodTest(BloodTest $bloodTest, bool $updateRelation = true): void
