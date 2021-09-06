@@ -12,14 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['dog:read'],
-        'datetime_format' => 'j/m/Y'
-    ],
-    denormalizationContext: [
-        'groups' => ['dog:write'],
-        'datetime_format' => 'j/m/Y'
-    ]
+    normalizationContext: ['groups' => ['dog:read'], 'datetime_format' => 'j/m/Y'],
+    denormalizationContext: ['groups' => ['dog:write'], 'datetime_format' => 'j/m/Y']
 )]
 class Dog
 {
@@ -93,11 +87,11 @@ class Dog
     #[Assert\Positive]
     public ?int $size = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public array $allergies = [];
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public array $behaviorRecords = [];
 
