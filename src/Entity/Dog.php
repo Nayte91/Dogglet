@@ -35,7 +35,7 @@ class Dog
     #[ApiProperty('Sexe')]
     public ?string $gender = 'M';
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     #[ApiProperty('Stérilisé / Castré')]
     public bool $isSterilized = false;
@@ -63,19 +63,19 @@ class Dog
     #[ApiProperty('Robe')]
     public ?string $coat = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public bool $isInsured = false;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public bool $hasLicense = false;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public bool $hasPassport = false;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['dog:read', 'dog:write'])]
     public bool $hasMicrochip = false;
 
